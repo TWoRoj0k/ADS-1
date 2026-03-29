@@ -1,7 +1,7 @@
 // Copyright 2022 NNTU-CS
 #include <cstdint>
+#include <cmath>
 #include "alg.h"
-
 
 bool checkPrime(uint64_t value) {
     if (value < 2) {
@@ -34,50 +34,67 @@ uint64_t nPrime(uint64_t n) {
         }
         currentNum += 2;
     }
+    return 0;
 }
 
 uint64_t nextPrime(uint64_t value) {
-    if (value < 2)return 2;
+    if (value < 2) {
+        return 2;
+    }
 
     uint64_t candidate = value + 1;
 
-    if (candidate % 2 == 0)candidate++;
+    if (candidate % 2 == 0) {
+        candidate++;
+    }
 
     while (true) {
-        if (checkPrime(candidate))return candidate;
+        if (checkPrime(candidate)) {
+            return candidate;
+        }
         candidate += 2;
     }
 }
 
 uint64_t sumPrime(uint64_t hbound) {
-
     int64_t sum = 0;
 
-    if (hbound <= 2) sum = 0;
-    if (2 < hbound) sum = 2;
-
-    for (int i = 3; i <= hbound - 1; i += 2) {
-        if (checkPrime(i))sum += i;
+    if (hbound <= 2) {
+        sum = 0;
     }
-    return sum;
+    if (2 < hbound) {
+        sum = 2;
+    }
+
+    for (int i = 3; i <= static_cast<int>(hbound - 1); i += 2) {
+        if (checkPrime(static_cast<uint64_t>(i))) {
+            sum += i;
+        }
+    }
+    return static_cast<uint64_t>(sum);
 }
 
 uint64_t twinPrimes(uint64_t lbound, uint64_t hbound) {
-    if (lbound < 2) lbound = 2;
+    if (lbound < 2) {
+        lbound = 2;
+    }
 
-    uint64_t previous = -1; //
+    uint64_t previous = 0;
     uint64_t count = 0;
     uint64_t current = lbound;
+    bool hasPrevious = false;
 
     while (current < hbound) {
         if (checkPrime(current)) {
-            if (previous != -1 && current - previous == 2) {
+            if (hasPrevious && current - previous == 2) {
                 count++;
             }
-            previous == current;
+            previous = current;
+            hasPrevious = true;
         }
         current++;
     }
     return count;
+}
 
 }
